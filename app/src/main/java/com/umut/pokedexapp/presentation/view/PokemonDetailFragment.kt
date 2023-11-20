@@ -1,25 +1,27 @@
 package com.umut.pokedexapp.presentation.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.umut.pokedexapp.R
+import com.umut.pokedexapp.databinding.FragmentPokemonDetailBinding
 import com.umut.pokedexapp.presentation.viewmodel.PokemonDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class PokemonDetailFragment : Fragment() {
     private val pokemonDetailViewModel : PokemonDetailViewModel by viewModels()
+    private lateinit var binding: FragmentPokemonDetailBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pokemon_detail, container, false)
+    ): View {
+        binding = FragmentPokemonDetailBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
