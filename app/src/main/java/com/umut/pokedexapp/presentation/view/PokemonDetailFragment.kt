@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.umut.pokedexapp.R
+import androidx.navigation.fragment.navArgs
 import com.umut.pokedexapp.databinding.FragmentPokemonDetailBinding
 import com.umut.pokedexapp.presentation.viewmodel.PokemonDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PokemonDetailFragment : Fragment() {
     private val pokemonDetailViewModel : PokemonDetailViewModel by viewModels()
     private lateinit var binding: FragmentPokemonDetailBinding
+    private val safeArgs : PokemonDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +27,8 @@ class PokemonDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).updateToolbarView("PokemonDetailFragment")
+        binding.pokemonName.text = safeArgs.name
 
     }
 }

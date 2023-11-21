@@ -1,4 +1,4 @@
-package com.umut.pokedexapp.domain.use_case.get_pokemon_results
+package com.umut.pokedexapp.domain.use_case.get_pokemon_list
 
 import com.umut.pokedexapp.data.remote.dto.toPokemonList
 import com.umut.pokedexapp.domain.model.Pokemon

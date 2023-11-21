@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.umut.pokedexapp.R
+import androidx.navigation.fragment.findNavController
 import com.umut.pokedexapp.databinding.FragmentPokemonListBinding
 import com.umut.pokedexapp.presentation.viewmodel.PokemonListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PokemonListFragment : Fragment() {
     private val pokemonListViewModel: PokemonListViewModel by viewModels()
     private lateinit var binding: FragmentPokemonListBinding
+    private val pokemonListAdapter = PokemonListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -25,13 +26,18 @@ class PokemonListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (activity as MainActivity).updateToolbarView("PokemonListFragment")
+        binding.rvPokemon.adapter = pokemonListAdapter.apply {
+            itemClickListener =
+                { pokemon -> val action = PokemonListFragmentDirections.actionPokemonListFragmentToPokemonDetailFragment(name = pokemon.name)
+                findNavController().navigate(action)}
+        }
         initObservers()
     }
 
     private fun initObservers() {
-        pokemonListViewModel.pokemonListResource.observe(viewLifecycleOwner) {
-
+        pokemonListViewModel.pokemonListResource.observe(viewLifecycleOwner) {pokemonListResource ->
+            pokemonListAdapter.submitList(pokemonListResource.data)
         }
 
         pokemonListViewModel.pokemonListLoading.observe(viewLifecycleOwner) {

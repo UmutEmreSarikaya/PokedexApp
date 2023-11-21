@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.umut.pokedexapp.domain.model.Pokemon
-import com.umut.pokedexapp.domain.use_case.get_pokemon_results.GetPokemonListUseCase
+import com.umut.pokedexapp.domain.use_case.get_pokemon_list.GetPokemonListUseCase
 import com.umut.pokedexapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler

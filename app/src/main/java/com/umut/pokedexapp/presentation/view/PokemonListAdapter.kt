@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.umut.pokedexapp.databinding.ItemPokemonBinding
 import com.umut.pokedexapp.domain.model.Pokemon
 
@@ -22,11 +23,30 @@ class PokemonListAdapter : ListAdapter<Pokemon, PokemonListAdapter.PokemonListVi
             itemClickListener: ((Pokemon) -> Unit)?
         ) {
             binding.apply {
-                tvPokemonId.text = "0003"
+                val pokemonId = extractIdFromUrl(pokemon.url)
+                tvPokemonId.text = getPokemonIdFormatted(pokemonId)
+                Glide.with(itemView)
+                    .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$pokemonId.png")
+                    .into(ivPokemon)
                 itemLayout.setOnClickListener {
                     itemClickListener?.invoke(pokemon)
                 }
             }
+        }
+
+        private fun extractIdFromUrl(url: String): Int {
+            val parts = url.split("/")
+            return parts[parts.size - 2].toInt()
+        }
+
+        private fun getPokemonIdFormatted(id: Int): String {
+            val formattedId = when (id) {
+                in 1..9 -> "#000$id"
+                in 10..99 -> "#00$id"
+                in 100..999 -> "#0$id"
+                else -> "#$id"
+            }
+            return formattedId
         }
     }
 
