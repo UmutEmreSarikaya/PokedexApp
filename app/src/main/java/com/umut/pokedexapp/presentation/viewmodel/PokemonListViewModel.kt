@@ -29,7 +29,7 @@ class PokemonListViewModel @Inject constructor(private val getPokemonListUseCase
         getPokemonList()
     }
 
-     private fun getPokemonList() {
+    private fun getPokemonList() {
         pokemonListLoading.value = Resource.loading(true)
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
