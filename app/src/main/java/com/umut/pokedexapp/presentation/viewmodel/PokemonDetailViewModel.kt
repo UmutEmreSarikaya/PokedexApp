@@ -3,7 +3,6 @@ package com.umut.pokedexapp.presentation.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.umut.pokedexapp.domain.model.Pokemon
 import com.umut.pokedexapp.domain.model.PokemonDetail
 import com.umut.pokedexapp.domain.use_case.get_pokemon_detail.GetPokemonDetailUseCase
 import com.umut.pokedexapp.util.Resource
@@ -15,7 +14,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class PokemonDetailViewModel @Inject constructor(private val getPokemonDetailUseCase: GetPokemonDetailUseCase) : ViewModel() {
+class PokemonDetailViewModel @Inject constructor(private val getPokemonDetailUseCase: GetPokemonDetailUseCase) :
+    ViewModel() {
     val pokemonDetailResource = MutableLiveData<Resource<PokemonDetail>>()
     val pokemonListError = MutableLiveData<Resource<Boolean>>()
     val pokemonListLoading = MutableLiveData<Resource<Boolean>>()
@@ -25,7 +25,7 @@ class PokemonDetailViewModel @Inject constructor(private val getPokemonDetailUse
         pokemonListError.value = Resource.error(throwable.localizedMessage ?: "An Error Occurred!", true)
     }
 
-    private fun getPokemonDetail(pokemonName: String) {
+    fun getPokemonDetail(pokemonName: String) {
         pokemonListLoading.value = Resource.loading(true)
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {

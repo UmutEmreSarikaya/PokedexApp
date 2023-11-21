@@ -28,7 +28,24 @@ class PokemonDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).updateToolbarView("PokemonDetailFragment")
-        binding.pokemonName.text = safeArgs.name
 
+        pokemonDetailViewModel.getPokemonDetail(safeArgs.name)
+        initObservers()
+    }
+
+    private fun initObservers() {
+        pokemonDetailViewModel.pokemonDetailResource.observe(viewLifecycleOwner) {pokemonDetailResource ->
+            binding.apply {
+                pokemonName.text = pokemonDetailResource.data?.name
+            }
+        }
+
+        pokemonDetailViewModel.pokemonListLoading.observe(viewLifecycleOwner) {
+
+        }
+
+        pokemonDetailViewModel.pokemonListError.observe(viewLifecycleOwner) {
+
+        }
     }
 }
