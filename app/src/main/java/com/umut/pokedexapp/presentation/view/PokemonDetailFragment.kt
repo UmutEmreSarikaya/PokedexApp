@@ -27,7 +27,6 @@ class PokemonDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).updateToolbarView("PokemonDetailFragment")
 
         pokemonDetailViewModel.getPokemonDetail(safeArgs.name)
         initObservers()

@@ -26,7 +26,6 @@ class PokemonListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).updateToolbarView("PokemonListFragment")
         binding.rvPokemon.adapter = pokemonListAdapter.apply {
             itemClickListener =
                 { pokemon -> val action = PokemonListFragmentDirections.actionPokemonListFragmentToPokemonDetailFragment(name = pokemon.name)
