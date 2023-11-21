@@ -50,6 +50,7 @@ fun PokemonDetailDTO.toPokemonDetail(): PokemonDetail {
             }
 
             "defense" -> {
+
                 defense = stat.base_stat
             }
 

@@ -2,6 +2,7 @@ package com.umut.pokedexapp.data.repository
 
 import com.umut.pokedexapp.data.remote.dto.PokemonDetailDTO
 import com.umut.pokedexapp.data.remote.dto.PokemonListDTO
+import com.umut.pokedexapp.data.remote.dto.PokemonSpeciesDTO
 import com.umut.pokedexapp.data.remote.service.PokemonApi
 import com.umut.pokedexapp.domain.repository.PokemonRepository
 import retrofit2.Response
@@ -14,5 +15,9 @@ class PokemonRepositoryImpl @Inject constructor(private val pokemonApi: PokemonA
 
     override suspend fun getPokemonDetail(pokemonName:String): Response<PokemonDetailDTO> {
         return pokemonApi.getPokemonDetail(pokemonName)
+    }
+
+    override suspend fun getPokemonSpecies(pokemonName: String): Response<PokemonSpeciesDTO> {
+        return pokemonApi.getPokemonSpecies(pokemonName)
     }
 }

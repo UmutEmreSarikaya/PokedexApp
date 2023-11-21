@@ -36,7 +36,7 @@ class PokemonDetailFragment : Fragment() {
     private fun initObservers() {
         pokemonDetailViewModel.pokemonDetailResource.observe(viewLifecycleOwner) {pokemonDetailResource ->
             binding.apply {
-                pokemonName.text = pokemonDetailResource.data?.name
+
             }
         }
 
@@ -45,6 +45,10 @@ class PokemonDetailFragment : Fragment() {
         }
 
         pokemonDetailViewModel.pokemonListError.observe(viewLifecycleOwner) {
+
+        }
+
+        pokemonDetailViewModel.pokemonSpeciesResource.observe(viewLifecycleOwner) {
 
         }
     }

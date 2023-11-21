@@ -8,7 +8,6 @@ data class PokemonDetail(
     val weight: Int,
     val height: Int,
     val moves: List<String>,
-    val description: String = "",
     val hp: Int,
     val attack: Int,
     val defense: Int,
