@@ -21,8 +21,7 @@ class PokemonListAdapter : ListAdapter<Pokemon, PokemonListAdapter.PokemonListVi
         private val binding: ItemPokemonBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            pokemon: Pokemon,
-            itemClickListener: ((Pokemon) -> Unit)?
+            pokemon: Pokemon, itemClickListener: ((Pokemon) -> Unit)?
         ) {
             binding.apply {
                 val pokemonId = pokemon.url.extractIdFromUrl()
