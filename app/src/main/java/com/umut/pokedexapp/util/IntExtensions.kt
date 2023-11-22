@@ -23,9 +23,9 @@ fun Int?.formatStat(): String {
         "000"
     } else {
         val formattedStat = when (this) {
-            in 1..9 -> "#00$this"
-            in 10..99 -> "#0$this"
-            else -> "#$this"
+            in 1..9 -> "00$this"
+            in 10..99 -> "0$this"
+            else -> "$this"
         }
         formattedStat
     }

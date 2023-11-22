@@ -137,7 +137,7 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_base_stats"
             app:trackCornerRadius="50dp" />
@@ -252,7 +252,7 @@
         <View
             android:id="@+id/separator_line"
             android:layout_width="1dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="10dp"
             android:layout_height="120dp"
             android:background="@color/transparent_gray"
             app:layout_constraintBottom_toBottomOf="@id/tv_pokemon_spd"
@@ -263,7 +263,7 @@
             android:id="@+id/tv_hp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/hp"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/hp_progress"
