@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.umut.pokedexapp.databinding.ItemPokemonBinding
 import com.umut.pokedexapp.domain.model.Pokemon
+import com.umut.pokedexapp.util.extractIdFromUrl
+import com.umut.pokedexapp.util.getPokemonIdFormatted
 
 class PokemonListAdapter : ListAdapter<Pokemon, PokemonListAdapter.PokemonListViewHolder>(
     CharacterDiffCallback
@@ -23,30 +25,16 @@ class PokemonListAdapter : ListAdapter<Pokemon, PokemonListAdapter.PokemonListVi
             itemClickListener: ((Pokemon) -> Unit)?
         ) {
             binding.apply {
-                val pokemonId = extractIdFromUrl(pokemon.url)
-                tvPokemonId.text = getPokemonIdFormatted(pokemonId)
+                val pokemonId = pokemon.url.extractIdFromUrl()
+                tvPokemonId.text = pokemonId.getPokemonIdFormatted()
                 Glide.with(itemView)
                     .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$pokemonId.png")
                     .into(ivPokemon)
+                tvPokemonName.text = pokemon.name.replaceFirstChar { it.titlecase() }
                 itemLayout.setOnClickListener {
                     itemClickListener?.invoke(pokemon)
                 }
             }
-        }
-
-        private fun extractIdFromUrl(url: String): Int {
-            val parts = url.split("/")
-            return parts[parts.size - 2].toInt()
-        }
-
-        private fun getPokemonIdFormatted(id: Int): String {
-            val formattedId = when (id) {
-                in 1..9 -> "#000$id"
-                in 10..99 -> "#00$id"
-                in 100..999 -> "#0$id"
-                else -> "#$id"
-            }
-            return formattedId
         }
     }
 
