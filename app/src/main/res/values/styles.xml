@@ -5,4 +5,19 @@
         <item name="android:queryBackground">@android:color/transparent</item>
         <item name="android:backgroundTint">@color/white</item>
     </style>
+
+    <style name="ConstraintLayoutStyle">
+        <item name="android:background">@drawable/search_view_background</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+    <style name="roundedButton">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

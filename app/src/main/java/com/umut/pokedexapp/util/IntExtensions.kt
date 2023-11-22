@@ -9,3 +9,24 @@ fun Int.getPokemonIdFormatted(): String {
     }
     return formattedId
 }
+
+fun Int?.calculateProgress(): Int {
+    return if (this != null) {
+        this * 100 / Constants.HIGHEST_BASE_STAT
+    } else {
+        0
+    }
+}
+
+fun Int?.formatStat(): String {
+    return if (this==null){
+        "000"
+    } else {
+        val formattedStat = when (this) {
+            in 1..9 -> "#00$this"
+            in 10..99 -> "#0$this"
+            else -> "#$this"
+        }
+        formattedStat
+    }
+}

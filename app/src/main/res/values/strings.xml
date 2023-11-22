@@ -4,4 +4,15 @@
     <string name="search">Search</string>
     <string name="pokedex">Pokédex</string>
     <string name="image_of_a_pokeball">Image of a pokeball</string>
+    <string name="filter_option_button">Filter Option Button</string>
+    <string name="back">Back</string>
+    <string name="about">About</string>
+    <string name="base_stats">Base Stats</string>
+    <string name="_000">000</string>
+    <string name="spd">SPD</string>
+    <string name="hp">HP</string>
+    <string name="atk">ATK</string>
+    <string name="def">DEF</string>
+    <string name="satk">SATK</string>
+    <string name="sdef">SDEF</string>
 </resources>

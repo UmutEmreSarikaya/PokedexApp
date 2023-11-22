@@ -32,6 +32,6 @@ data class PokemonSpeciesDTO(
     val varieties: List<Variety>
 )
 
-fun PokemonSpeciesDTO.toPokemonSpecies(): PokemonSpecies{
-    return PokemonSpecies(flavorText = flavor_text_entries.first().flavor_text)
+fun PokemonSpeciesDTO.toPokemonSpecies(): PokemonSpecies {
+    return PokemonSpecies(flavorText = flavor_text_entries.first { it.language.name == "en" }.flavor_text)
 }
