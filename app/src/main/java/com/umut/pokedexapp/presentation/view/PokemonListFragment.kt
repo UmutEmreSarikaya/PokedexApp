@@ -1,7 +1,6 @@
 package com.umut.pokedexapp.presentation.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,13 +81,11 @@ class PokemonListFragment : Fragment() {
             loadingResource.data?.let { loading ->
                 if (loading) {
                     binding.apply {
-                        Log.d("myLog", "true")
                         progressBar.viewVisible()
                         rvPokemon.viewGone()
                         tvError.viewGone()
                     }
                 } else {
-                    Log.d("myLog", "false")
                     binding.progressBar.viewGone()
                 }
             }
