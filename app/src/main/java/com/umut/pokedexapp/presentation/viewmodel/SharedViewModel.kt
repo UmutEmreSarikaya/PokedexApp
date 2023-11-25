@@ -26,7 +26,6 @@ class SharedViewModel @Inject constructor(
     private val getPokemonDetailUseCase: GetPokemonDetailUseCase,
     private val getPokemonSpeciesUseCase: GetPokemonSpeciesUseCase
 ) : ViewModel() {
-    //val pokemonListResource = MutableLiveData<Resource<List<Pokemon>>>()
     private val _pokemonListResource = MutableSharedFlow<Resource<List<Pokemon>>>()
     val pokemonListResource = _pokemonListResource.asSharedFlow()
     private val _pokemonListError = MutableStateFlow(Resource.error("", false))
@@ -47,7 +46,7 @@ class SharedViewModel @Inject constructor(
     var unfilteredPokemonList = listOf<Pokemon>()
     var filteredPokemonList = listOf<Pokemon>()
     var pokemonName = ""
-    var filterByName = true
+    var filterByNumber = true
 
 
     private val listExceptionHandler = CoroutineExceptionHandler { _, throwable ->

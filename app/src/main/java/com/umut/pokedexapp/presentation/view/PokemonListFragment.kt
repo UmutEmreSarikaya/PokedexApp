@@ -37,24 +37,19 @@ class PokemonListFragment : Fragment() {
 
         activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.red)
 
+        setAdapter()
+        initObservers()
+        setOnQueryTextListener()
+        setOnClickListeners()
+    }
+
+    private fun setAdapter(){
         binding.rvPokemon.adapter = pokemonListAdapter.apply {
             itemClickListener = { pokemon ->
                 sharedViewModel.pokemonName = pokemon.name
                 findNavController().navigate(R.id.action_pokemonListFragment_to_pokemonDetailFragment)
             }
         }
-        initObservers()
-        setOnQueryTextListener()
-        binding.filterTypeButton.setOnClickListener {
-            if (sharedViewModel.filterByName) {
-                binding.filterTypeButton.setImageResource(R.drawable.baseline_format_color_text_24)
-                sharedViewModel.filterByName = false
-            } else {
-                binding.filterTypeButton.setImageResource(R.drawable.baseline_numbers_24)
-                sharedViewModel.filterByName = true
-            }
-        }
-
     }
 
     private fun initObservers() {
@@ -116,15 +111,15 @@ class PokemonListFragment : Fragment() {
                     sharedViewModel.filteredPokemonList = sharedViewModel.unfilteredPokemonList
                     pokemonListAdapter.submitList(sharedViewModel.unfilteredPokemonList)
                 } else {
-                        if (sharedViewModel.filterByName){
+                        if (sharedViewModel.filterByNumber){
+                            sharedViewModel.filteredPokemonList =  sharedViewModel.unfilteredPokemonList.filter { pokemon ->
+                                pokemon.url.extractIdFromUrl().toString() == newText.toString()
+                            }
+                        } else {
                             sharedViewModel.filteredPokemonList =  sharedViewModel.unfilteredPokemonList.filter { pokemon ->
                                 pokemon.name.contains(
                                     newText.toString()
                                 )
-                            }
-                        } else {
-                            sharedViewModel.filteredPokemonList =  sharedViewModel.unfilteredPokemonList.filter { pokemon ->
-                                pokemon.url.extractIdFromUrl().toString() == newText.toString()
                             }
                         }
 
@@ -133,5 +128,17 @@ class PokemonListFragment : Fragment() {
                 return true
             }
         })
+    }
+
+    private fun setOnClickListeners(){
+        binding.filterTypeButton.setOnClickListener {
+            if (sharedViewModel.filterByNumber) {
+                binding.filterTypeButton.setImageResource(R.drawable.baseline_format_color_text_24)
+                sharedViewModel.filterByNumber = false
+            } else {
+                binding.filterTypeButton.setImageResource(R.drawable.baseline_numbers_24)
+                sharedViewModel.filterByNumber = true
+            }
+        }
     }
 }
