@@ -71,7 +71,7 @@ fun PokemonDetailDTO.toPokemonDetail(): PokemonDetail {
     return PokemonDetail(
         id = this.id,
         name = this.name,
-        imageUrl = this.sprites.front_default,
+        imageUrl = this.sprites.other.official_artwork.front_default,
         types = types,
         weight = this.weight,
         height = this.height,

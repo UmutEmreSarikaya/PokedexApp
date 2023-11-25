@@ -27,7 +27,7 @@ class PokemonListAdapter : ListAdapter<Pokemon, PokemonListAdapter.PokemonListVi
                 val pokemonId = pokemon.url.extractIdFromUrl()
                 tvPokemonId.text = pokemonId.getPokemonIdFormatted()
                 Glide.with(itemView)
-                    .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$pokemonId.png")
+                    .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png")
                     .into(ivPokemon)
                 tvPokemonName.text = pokemon.name.replaceFirstChar { it.titlecase() }
                 itemLayout.setOnClickListener {

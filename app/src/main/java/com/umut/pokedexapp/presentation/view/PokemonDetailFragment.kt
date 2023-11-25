@@ -33,6 +33,9 @@ import kotlinx.coroutines.launch
 class PokemonDetailFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by hiltNavGraphViewModels(R.id.navigation_graph)
     private lateinit var binding: FragmentPokemonDetailBinding
+    private val movesList = mutableListOf<TextView>()
+    private val typesList = mutableListOf<Chip>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -47,11 +50,32 @@ class PokemonDetailFragment : Fragment() {
         initObservers()
         sharedViewModel.getPokemonDetail(sharedViewModel.pokemonName)
         binding.ibBack.setOnClickListener { findNavController().navigateUp() }
+        binding.ibPreviousPokemon.setOnClickListener {
+            sharedViewModel.getPokemonDetail(getPreviousPokemon(sharedViewModel.pokemonName))
+            sharedViewModel.pokemonName = getPreviousPokemon(sharedViewModel.pokemonName)
+            movesList.forEach { textView ->
+                binding.movesLayout.removeView(textView)
+            }
+            typesList.forEach { chip ->
+                binding.chipGroup.removeView(chip)
+            }
+        }
+        binding.ibNextPokemon.setOnClickListener {
+            sharedViewModel.getPokemonDetail(getNextPokemon(sharedViewModel.pokemonName))
+            sharedViewModel.pokemonName = getNextPokemon(sharedViewModel.pokemonName)
+            movesList.forEach { textView ->
+                binding.movesLayout.removeView(textView)
+            }
+            typesList.forEach { chip ->
+                binding.chipGroup.removeView(chip)
+            }
+        }
     }
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             sharedViewModel.pokemonDetailResource.collect { pokemonDetailResource ->
+                Log.d("mine", pokemonDetailResource.data.toString())
                 val colorResource =
                     PokemonType.getColorResource(pokemonDetailResource.data?.types?.get(0))
                 val detailColor = ContextCompat.getColor(requireContext(), colorResource)
@@ -109,7 +133,8 @@ class PokemonDetailFragment : Fragment() {
 
                 pokemonDetailResource.data?.moves?.forEach { moveName ->
                     binding.movesLayout.addView(
-                        createTextView(requireContext(),
+                        createTextView(
+                            requireContext(),
                             moveName.replaceFirstChar { it.titlecase() })
                     )
                 }
@@ -185,7 +210,7 @@ class PokemonDetailFragment : Fragment() {
     }
 
     private fun createChip(context: Context, typeName: String, colorResource: Int): Chip {
-        return Chip(context).apply {
+        val chip = Chip(context).apply {
             val shapeAppearance = shapeAppearanceModel.withCornerSize(50f)
             text = typeName
             setChipBackgroundColorResource(colorResource)
@@ -193,12 +218,36 @@ class PokemonDetailFragment : Fragment() {
             setTextColor(ContextCompat.getColor(context, R.color.white))
             shapeAppearanceModel = shapeAppearance
         }
+        typesList.add(chip)
+        return chip
     }
 
     private fun createTextView(context: Context, moveName: String): TextView {
-        return TextView(context).apply {
+        val textView = TextView(context).apply {
             text = moveName
             setTextColor(ContextCompat.getColor(context, R.color.black))
         }
+        movesList.add(textView)
+        return textView
+    }
+
+    private fun getNextPokemon(pokemonName: String): String {
+        var nextPokemonName = pokemonName
+        sharedViewModel.filteredPokemonList.forEachIndexed { index, pokemon ->
+            if (pokemon.name == pokemonName && index + 1 < sharedViewModel.filteredPokemonList.size) {
+                nextPokemonName = sharedViewModel.filteredPokemonList[index + 1].name
+            }
+        }
+        return nextPokemonName
+    }
+
+    private fun getPreviousPokemon(pokemonName: String): String {
+        var nextPreviousName = pokemonName
+        sharedViewModel.filteredPokemonList.forEachIndexed { index, pokemon ->
+            if (pokemon.name == pokemonName && index - 1 > -1) {
+                nextPreviousName = sharedViewModel.filteredPokemonList[index - 1].name
+            }
+        }
+        return nextPreviousName
     }
 }
