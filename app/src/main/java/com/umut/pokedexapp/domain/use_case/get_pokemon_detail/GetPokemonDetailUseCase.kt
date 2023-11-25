@@ -4,22 +4,27 @@ import com.umut.pokedexapp.data.remote.dto.toPokemonDetail
 import com.umut.pokedexapp.domain.model.PokemonDetail
 import com.umut.pokedexapp.domain.repository.PokemonRepository
 import com.umut.pokedexapp.util.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
+import java.io.IOError
 import javax.inject.Inject
 
 class GetPokemonDetailUseCase @Inject constructor(private val pokemonRepository: PokemonRepository) {
-
-    suspend fun executeGetPokemonDetail(pokemonName: String): Resource<PokemonDetail> {
-        return try {
+    fun executeGetPokemonDetail(pokemonName: String): Flow<Resource<PokemonDetail>> = flow {
+        try {
             val response = pokemonRepository.getPokemonDetail(pokemonName)
             if (response.isSuccessful) {
                 response.body()?.let { pokemonDetailDTO ->
-                    return@let Resource.success(pokemonDetailDTO.toPokemonDetail())
-                } ?: Resource.error("Body Is Empty!", null)
+                    emit(Resource.success(pokemonDetailDTO.toPokemonDetail()))
+                } ?: emit(Resource.error("Body Is Empty!", null))
             } else {
-                Resource.error("Response Failed!", null)
+                emit(Resource.error("Response Failed!", null))
             }
-        } catch (e: Exception) {
-            Resource.error("An Error Occurred!", null)
+        } catch (e: IOError) {
+            emit(Resource.error("No Internet Connection!!", null))
+        } catch (e: HttpException) {
+            emit(Resource.error(e.localizedMessage ?: "An Error Occurred!", null))
         }
     }
 }
