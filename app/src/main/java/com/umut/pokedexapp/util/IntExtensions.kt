@@ -18,15 +18,19 @@ fun Int?.calculateProgress(): Int {
     }
 }
 
-fun Int?.formatStat(): String {
-    return if (this==null){
-        "000"
-    } else {
-        val formattedStat = when (this) {
-            in 1..9 -> "00$this"
-            in 10..99 -> "0$this"
-            else -> "$this"
-        }
-        formattedStat
+fun Int.formatStat(): String {
+    val formattedStat = when (this) {
+        in 1..9 -> "00$this"
+        in 10..99 -> "0$this"
+        else -> "$this"
     }
+    return formattedStat
+}
+
+fun Int.formatHeight(): String {
+    return (this.toFloat() / 10).toString().replace(".", ",") + " m"
+}
+
+fun Int.formatWeight(): String {
+    return (this.toFloat() / 10).toString().replace(".", ",") + " kg"
 }

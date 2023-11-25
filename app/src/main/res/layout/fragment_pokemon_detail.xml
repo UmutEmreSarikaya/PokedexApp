@@ -5,11 +5,23 @@
     android:id="@+id/outer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red"
+    android:background="@color/white"
     tools:context=".presentation.view.PokemonDetailFragment">
 
+    <TextView
+        android:id="@+id/tv_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/an_error_occurred"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
-        android:id="@+id/back_button"
+        android:id="@+id/ib_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -28,9 +40,9 @@
         android:textColor="@color/white"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/back_button"
-        app:layout_constraintStart_toEndOf="@+id/back_button"
-        app:layout_constraintTop_toTopOf="@id/back_button" />
+        app:layout_constraintBottom_toBottomOf="@id/ib_back"
+        app:layout_constraintStart_toEndOf="@+id/ib_back"
+        app:layout_constraintTop_toTopOf="@id/ib_back" />
 
     <TextView
         android:id="@+id/tv_pokemon_id"
@@ -69,6 +81,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ib_previous_pokemon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/back"
+        android:src="@drawable/baseline_arrow_back_ios_new_24"
+        app:layout_constraintBottom_toTopOf="@id/inner_layout"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ib_next_pokemon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/back"
+        android:src="@drawable/baseline_arrow_forward_ios_24"
+        app:layout_constraintBottom_toTopOf="@id/inner_layout"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/inner_layout"
         android:layout_width="match_parent"
@@ -80,6 +126,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_transparent_pokeball">
 
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/inner_guideline_horizontal"
             android:layout_width="wrap_content"
@@ -88,11 +135,9 @@
             app:layout_constraintGuide_percent="0.18" />
 
         <com.google.android.material.chip.ChipGroup
-            android:orientation="vertical"
             android:id="@+id/chip_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/inner_guideline_horizontal" />
@@ -101,13 +146,114 @@
             android:id="@+id/tv_about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:text="@string/about"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chip_group" />
+
+        <LinearLayout
+            android:id="@+id/moves_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/height_moves_separator_guideline"
+            app:layout_constraintTop_toBottomOf="@id/tv_about" />
+
+        <TextView
+            android:id="@+id/tv_moves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/moves"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="@id/moves_layout"
+            app:layout_constraintStart_toStartOf="@id/moves_layout"
+            app:layout_constraintTop_toBottomOf="@id/moves_layout" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/height_moves_separator_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.6666" />
+
+        <View
+            android:id="@+id/height_moves_separator"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/transparent_gray"
+            app:layout_constraintBottom_toBottomOf="@id/tv_moves"
+            app:layout_constraintStart_toStartOf="@+id/height_moves_separator_guideline"
+            app:layout_constraintTop_toTopOf="@id/moves_layout" />
+
+        <TextView
+            android:id="@+id/tv_pokemon_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/ruler"
+            app:layout_constraintBottom_toBottomOf="@id/moves_layout"
+            app:layout_constraintEnd_toEndOf="@+id/height_moves_separator_guideline"
+            app:layout_constraintStart_toStartOf="@+id/weight_height_separator_guideline"
+            app:layout_constraintTop_toTopOf="@+id/moves_layout" />
+
+        <TextView
+            android:id="@+id/tv_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/height"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_moves"
+            app:layout_constraintEnd_toEndOf="@id/tv_pokemon_height"
+            app:layout_constraintStart_toStartOf="@id/tv_pokemon_height"
+            app:layout_constraintTop_toTopOf="@id/tv_moves" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/weight_height_separator_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3333" />
+
+        <View
+            android:id="@+id/weight_height_separator"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/transparent_gray"
+            app:layout_constraintBottom_toBottomOf="@id/tv_moves"
+            app:layout_constraintStart_toStartOf="@+id/weight_height_separator_guideline"
+            app:layout_constraintTop_toTopOf="@id/moves_layout" />
+
+        <TextView
+            android:id="@+id/tv_pokemon_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/weight"
+            app:layout_constraintBottom_toBottomOf="@id/moves_layout"
+            app:layout_constraintEnd_toEndOf="@+id/weight_height_separator_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/moves_layout" />
+
+        <TextView
+            android:id="@+id/tv_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/weight"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_moves"
+            app:layout_constraintEnd_toEndOf="@id/tv_pokemon_weight"
+            app:layout_constraintStart_toStartOf="@id/tv_pokemon_weight"
+            app:layout_constraintTop_toTopOf="@id/tv_moves" />
 
         <TextView
             android:id="@+id/tv_description"
@@ -118,7 +264,7 @@
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_about" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_moves" />
 
         <TextView
             android:id="@+id/tv_base_stats"
@@ -132,11 +278,10 @@
             app:layout_constraintTop_toBottomOf="@id/tv_description" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:indeterminate="false"
             android:id="@+id/hp_progress"
-            android:layout_width="250dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_base_stats"
@@ -155,10 +300,11 @@
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/atk_progress"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="@id/hp_progress"
+            app:layout_constraintStart_toStartOf="@id/hp_progress"
             app:layout_constraintTop_toBottomOf="@id/hp_progress"
             app:trackCornerRadius="50dp" />
 
@@ -175,10 +321,11 @@
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/def_progress"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="@id/hp_progress"
+            app:layout_constraintStart_toStartOf="@id/hp_progress"
             app:layout_constraintTop_toBottomOf="@id/atk_progress"
             app:trackCornerRadius="50dp" />
 
@@ -194,10 +341,11 @@
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/satk_progress"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="@id/hp_progress"
+            app:layout_constraintStart_toStartOf="@id/hp_progress"
             app:layout_constraintTop_toBottomOf="@id/def_progress"
             app:trackCornerRadius="50dp" />
 
@@ -213,10 +361,11 @@
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/sdef_progress"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="@id/hp_progress"
+            app:layout_constraintStart_toStartOf="@id/hp_progress"
             app:layout_constraintTop_toBottomOf="@id/satk_progress"
             app:trackCornerRadius="50dp" />
 
@@ -232,10 +381,11 @@
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/spd_progress"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="@id/hp_progress"
+            app:layout_constraintStart_toStartOf="@id/hp_progress"
             app:layout_constraintTop_toBottomOf="@id/sdef_progress"
             app:trackCornerRadius="50dp" />
 
@@ -252,8 +402,8 @@
         <View
             android:id="@+id/separator_line"
             android:layout_width="1dp"
+            android:layout_height="0dp"
             android:layout_marginEnd="10dp"
-            android:layout_height="120dp"
             android:background="@color/transparent_gray"
             app:layout_constraintBottom_toBottomOf="@id/tv_pokemon_spd"
             app:layout_constraintEnd_toStartOf="@id/tv_pokemon_hp"

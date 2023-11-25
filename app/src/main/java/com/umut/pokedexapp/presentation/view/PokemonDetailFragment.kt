@@ -2,31 +2,37 @@ package com.umut.pokedexapp.presentation.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.umut.pokedexapp.R
 import com.umut.pokedexapp.databinding.FragmentPokemonDetailBinding
-import com.umut.pokedexapp.presentation.viewmodel.PokemonDetailViewModel
+import com.umut.pokedexapp.presentation.viewmodel.SharedViewModel
 import com.umut.pokedexapp.util.PokemonType
 import com.umut.pokedexapp.util.calculateProgress
+import com.umut.pokedexapp.util.formatHeight
 import com.umut.pokedexapp.util.formatStat
+import com.umut.pokedexapp.util.formatWeight
 import com.umut.pokedexapp.util.getPokemonIdFormatted
 import com.umut.pokedexapp.util.removeNewLines
+import com.umut.pokedexapp.util.viewGone
+import com.umut.pokedexapp.util.viewVisible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PokemonDetailFragment : Fragment() {
-    private val pokemonDetailViewModel: PokemonDetailViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by hiltNavGraphViewModels(R.id.navigation_graph)
     private lateinit var binding: FragmentPokemonDetailBinding
-    private val safeArgs: PokemonDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,58 +43,120 @@ class PokemonDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        pokemonDetailViewModel.getPokemonDetail(safeArgs.name)
+        Log.d("mine", sharedViewModel.filteredPokemonList.toString())
         initObservers()
-        binding.backButton.setOnClickListener { findNavController().popBackStack() }
+        sharedViewModel.getPokemonDetail(sharedViewModel.pokemonName)
+        binding.ibBack.setOnClickListener { findNavController().navigateUp() }
     }
 
     private fun initObservers() {
-        pokemonDetailViewModel.pokemonDetailResource.observe(viewLifecycleOwner) { pokemonDetailResource ->
-            val colorResource =
-                PokemonType.getColorResource(pokemonDetailResource.data?.types?.get(0))
-            val detailColor = ContextCompat.getColor(requireContext(), colorResource)
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.pokemonDetailResource.collect { pokemonDetailResource ->
+                val colorResource =
+                    PokemonType.getColorResource(pokemonDetailResource.data?.types?.get(0))
+                val detailColor = ContextCompat.getColor(requireContext(), colorResource)
 
-            setDetailColor(detailColor)
+                setDetailColor(detailColor)
 
-            binding.apply {
-                tvPokemonName.text =
-                    pokemonDetailResource.data?.name?.replaceFirstChar { it.titlecase() }
-                tvPokemonId.text = pokemonDetailResource.data?.id?.getPokemonIdFormatted()
-                Glide.with(this@PokemonDetailFragment).load(pokemonDetailResource.data?.imageUrl)
-                    .into(ivPokemon)
+                binding.apply {
+                    innerLayout.viewVisible()
+                    ivPokemon.viewVisible()
 
-                tvPokemonHp.text = pokemonDetailResource.data?.hp.formatStat()
-                tvPokemonAtk.text = pokemonDetailResource.data?.attack.formatStat()
-                tvPokemonDef.text = pokemonDetailResource.data?.defense.formatStat()
-                tvPokemonSatk.text = pokemonDetailResource.data?.specialAttack.formatStat()
-                tvPokemonSdef.text = pokemonDetailResource.data?.specialDefense.formatStat()
-                tvPokemonSpd.text = pokemonDetailResource.data?.speed.formatStat()
+                    tvPokemonName.text =
+                        pokemonDetailResource.data?.name?.replaceFirstChar { it.titlecase() }
+                    tvPokemonId.text = pokemonDetailResource.data?.id?.getPokemonIdFormatted()
+                    Glide.with(this@PokemonDetailFragment)
+                        .load(pokemonDetailResource.data?.imageUrl).into(ivPokemon)
 
-                hpProgress.setProgressCompat(pokemonDetailResource.data?.hp.calculateProgress(), true)
-                atkProgress.setProgressCompat(pokemonDetailResource.data?.attack.calculateProgress(), true)
-                defProgress.setProgressCompat(pokemonDetailResource.data?.defense.calculateProgress(), true)
-                satkProgress.setProgressCompat(pokemonDetailResource.data?.specialAttack.calculateProgress(), true)
-                sdefProgress.setProgressCompat(pokemonDetailResource.data?.specialDefense.calculateProgress(), true)
-                spdProgress.setProgressCompat(pokemonDetailResource.data?.speed.calculateProgress(), true)
+                    tvPokemonHp.text = pokemonDetailResource.data?.hp?.formatStat()
+                    tvPokemonAtk.text = pokemonDetailResource.data?.attack?.formatStat()
+                    tvPokemonDef.text = pokemonDetailResource.data?.defense?.formatStat()
+                    tvPokemonSatk.text = pokemonDetailResource.data?.specialAttack?.formatStat()
+                    tvPokemonSdef.text = pokemonDetailResource.data?.specialDefense?.formatStat()
+                    tvPokemonSpd.text = pokemonDetailResource.data?.speed?.formatStat()
+
+                    hpProgress.setProgressCompat(
+                        pokemonDetailResource.data?.hp.calculateProgress(), true
+                    )
+                    atkProgress.setProgressCompat(
+                        pokemonDetailResource.data?.attack.calculateProgress(), true
+                    )
+                    defProgress.setProgressCompat(
+                        pokemonDetailResource.data?.defense.calculateProgress(), true
+                    )
+                    satkProgress.setProgressCompat(
+                        pokemonDetailResource.data?.specialAttack.calculateProgress(), true
+                    )
+                    sdefProgress.setProgressCompat(
+                        pokemonDetailResource.data?.specialDefense.calculateProgress(), true
+                    )
+                    spdProgress.setProgressCompat(
+                        pokemonDetailResource.data?.speed.calculateProgress(), true
+                    )
+
+                    tvPokemonHeight.text = pokemonDetailResource.data?.height?.formatHeight()
+                    tvPokemonWeight.text = pokemonDetailResource.data?.weight?.formatWeight()
+                }
+
+                pokemonDetailResource.data?.types?.forEach { tagName ->
+                    val tagColorResource = PokemonType.getColorResource(tagName)
+                    binding.chipGroup.addView(
+                        createChip(
+                            requireContext(), tagName, tagColorResource
+                        )
+                    )
+                }
+
+                pokemonDetailResource.data?.moves?.forEach { moveName ->
+                    binding.movesLayout.addView(
+                        createTextView(requireContext(),
+                            moveName.replaceFirstChar { it.titlecase() })
+                    )
+                }
             }
-
-            pokemonDetailResource.data?.types?.forEach { tagName ->
-                val tagColorResource = PokemonType.getColorResource(tagName)
-                binding.chipGroup.addView(createChip(requireContext(), tagName, tagColorResource))
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.pokemonDetailLoading.collect { loadingResource ->
+                loadingResource.data?.let { loading ->
+                    if (loading) {
+                        binding.apply {
+                            progressBar.viewVisible()
+                            innerLayout.viewGone()
+                            ivPokemon.viewGone()
+                        }
+                    } else {
+                        binding.progressBar.viewGone()
+                    }
+                }
             }
         }
 
-        pokemonDetailViewModel.pokemonListLoading.observe(viewLifecycleOwner) {
-
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.pokemonDetailError.collect { errorResource ->
+                errorResource.data?.let { error ->
+                    if (error) {
+                        binding.apply {
+                            tvError.viewVisible()
+                            innerLayout.viewGone()
+                            progressBar.viewGone()
+                            outerLayout.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(), R.color.white
+                                )
+                            )
+                        }
+                    } else {
+                        binding.tvError.viewGone()
+                    }
+                }
+            }
         }
 
-        pokemonDetailViewModel.pokemonListError.observe(viewLifecycleOwner) {
-
-        }
-
-        pokemonDetailViewModel.pokemonSpeciesResource.observe(viewLifecycleOwner) { pokemonSpeciesResource ->
-            binding.tvDescription.text = pokemonSpeciesResource.data?.flavorText?.removeNewLines()
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.pokemonSpeciesResource.collect { pokemonSpeciesResource ->
+                binding.tvDescription.text =
+                    pokemonSpeciesResource.data?.flavorText?.removeNewLines()
+            }
         }
     }
 
@@ -116,11 +184,21 @@ class PokemonDetailFragment : Fragment() {
         }
     }
 
-    private fun createChip(context: Context, chipName: String, colorResource:Int): Chip {
+    private fun createChip(context: Context, typeName: String, colorResource: Int): Chip {
         return Chip(context).apply {
-            text = chipName
+            val shapeAppearance = shapeAppearanceModel.withCornerSize(50f)
+            text = typeName
             setChipBackgroundColorResource(colorResource)
+            setChipStrokeColorResource(colorResource)
             setTextColor(ContextCompat.getColor(context, R.color.white))
+            shapeAppearanceModel = shapeAppearance
+        }
+    }
+
+    private fun createTextView(context: Context, moveName: String): TextView {
+        return TextView(context).apply {
+            text = moveName
+            setTextColor(ContextCompat.getColor(context, R.color.black))
         }
     }
 }

@@ -19,8 +19,5 @@
         android:name="com.umut.pokedexapp.presentation.view.PokemonDetailFragment"
         android:label="fragment_pokemon_detail"
         tools:layout="@layout/fragment_pokemon_detail" >
-        <argument
-            android:name="name"
-            app:argType="string" />
     </fragment>
 </navigation>

@@ -36,8 +36,8 @@ fun PokemonDetailDTO.toPokemonDetail(): PokemonDetail {
         type.type.name
     }
 
-    val moves: List<String> = moves.map { move ->
-        move.move.name
+    val moves: List<String> = abilities.map { move ->
+        move.ability.name
     }
     stats.forEach { stat ->
         when (stat.stat.name) {

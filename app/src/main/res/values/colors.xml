@@ -5,6 +5,7 @@
     <color name="red">#EE1515</color>
     <color name="transparent_white">#20FFFFFF</color>
     <color name="transparent_gray">#6A8F8E8E</color>
+    <color name="background_view_color">#308F8E8E</color>
 
     <color name="type_normal">#A8A77A</color>
     <color name="type_fire">#EE8130</color>

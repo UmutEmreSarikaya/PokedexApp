@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
-    id("androidx.navigation.safeargs.kotlin")
     kotlin("kapt")
 }
 
@@ -57,6 +56,8 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    implementation("androidx.hilt:hilt-navigation-fragment:1.1.0")
 
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
