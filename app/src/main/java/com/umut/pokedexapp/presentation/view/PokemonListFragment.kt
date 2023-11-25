@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.umut.pokedexapp.R
 import com.umut.pokedexapp.databinding.FragmentPokemonListBinding
 import com.umut.pokedexapp.presentation.viewmodel.SharedViewModel
+import com.umut.pokedexapp.util.extractIdFromUrl
 import com.umut.pokedexapp.util.viewGone
 import com.umut.pokedexapp.util.viewVisible
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +45,16 @@ class PokemonListFragment : Fragment() {
         }
         initObservers()
         setOnQueryTextListener()
+        binding.filterTypeButton.setOnClickListener {
+            if (sharedViewModel.filterByName) {
+                binding.filterTypeButton.setImageResource(R.drawable.baseline_format_color_text_24)
+                sharedViewModel.filterByName = false
+            } else {
+                binding.filterTypeButton.setImageResource(R.drawable.baseline_numbers_24)
+                sharedViewModel.filterByName = true
+            }
+        }
+
     }
 
     private fun initObservers() {
@@ -105,12 +116,18 @@ class PokemonListFragment : Fragment() {
                     sharedViewModel.filteredPokemonList = sharedViewModel.unfilteredPokemonList
                     pokemonListAdapter.submitList(sharedViewModel.unfilteredPokemonList)
                 } else {
-                    sharedViewModel.filteredPokemonList =
-                        sharedViewModel.unfilteredPokemonList.filter { pokemon ->
-                            pokemon.name.contains(
-                                newText.toString()
-                            )
+                        if (sharedViewModel.filterByName){
+                            sharedViewModel.filteredPokemonList =  sharedViewModel.unfilteredPokemonList.filter { pokemon ->
+                                pokemon.name.contains(
+                                    newText.toString()
+                                )
+                            }
+                        } else {
+                            sharedViewModel.filteredPokemonList =  sharedViewModel.unfilteredPokemonList.filter { pokemon ->
+                                pokemon.url.extractIdFromUrl().toString() == newText.toString()
+                            }
                         }
+
                     pokemonListAdapter.submitList(sharedViewModel.filteredPokemonList)
                 }
                 return true

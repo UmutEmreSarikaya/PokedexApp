@@ -47,6 +47,7 @@ class SharedViewModel @Inject constructor(
     var unfilteredPokemonList = listOf<Pokemon>()
     var filteredPokemonList = listOf<Pokemon>()
     var pokemonName = ""
+    var filterByName = true
 
 
     private val listExceptionHandler = CoroutineExceptionHandler { _, throwable ->

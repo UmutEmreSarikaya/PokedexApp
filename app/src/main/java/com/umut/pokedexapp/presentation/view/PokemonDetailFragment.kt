@@ -187,7 +187,6 @@ class PokemonDetailFragment : Fragment() {
                     chipGroup.removeView(chip)
                 }
             }
-
         }
     }
 
