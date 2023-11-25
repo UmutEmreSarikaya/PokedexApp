@@ -1,7 +1,7 @@
 # Pokedex App
 
 ## About Project
-The Pokedex app fetches data from "https://pokeapi.co" and displays a list of Pokemon. Users can filter Pokemon by their names and IDs on one page and view detailed information about a selected Pokemon on another page.
+The Pokedex app fetches data from "https://pokeapi.co" and displays a list of Pokemon. Users can filter Pokemon by their names and IDs on list page and view detailed information about a selected Pokemon on detail page.
 
 ## Libraries
 - Dagger-Hilt: Used for dependency injection.
