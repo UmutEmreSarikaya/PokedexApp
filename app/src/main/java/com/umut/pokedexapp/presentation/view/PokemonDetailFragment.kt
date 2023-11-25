@@ -49,27 +49,7 @@ class PokemonDetailFragment : Fragment() {
         Log.d("mine", sharedViewModel.filteredPokemonList.toString())
         initObservers()
         sharedViewModel.getPokemonDetail(sharedViewModel.pokemonName)
-        binding.ibBack.setOnClickListener { findNavController().navigateUp() }
-        binding.ibPreviousPokemon.setOnClickListener {
-            sharedViewModel.getPokemonDetail(getPreviousPokemon(sharedViewModel.pokemonName))
-            sharedViewModel.pokemonName = getPreviousPokemon(sharedViewModel.pokemonName)
-            movesList.forEach { textView ->
-                binding.movesLayout.removeView(textView)
-            }
-            typesList.forEach { chip ->
-                binding.chipGroup.removeView(chip)
-            }
-        }
-        binding.ibNextPokemon.setOnClickListener {
-            sharedViewModel.getPokemonDetail(getNextPokemon(sharedViewModel.pokemonName))
-            sharedViewModel.pokemonName = getNextPokemon(sharedViewModel.pokemonName)
-            movesList.forEach { textView ->
-                binding.movesLayout.removeView(textView)
-            }
-            typesList.forEach { chip ->
-                binding.chipGroup.removeView(chip)
-            }
-        }
+        setOnClickListeners()
     }
 
     private fun initObservers() {
@@ -133,8 +113,7 @@ class PokemonDetailFragment : Fragment() {
 
                 pokemonDetailResource.data?.moves?.forEach { moveName ->
                     binding.movesLayout.addView(
-                        createTextView(
-                            requireContext(),
+                        createTextView(requireContext(),
                             moveName.replaceFirstChar { it.titlecase() })
                     )
                 }
@@ -182,6 +161,33 @@ class PokemonDetailFragment : Fragment() {
                 binding.tvDescription.text =
                     pokemonSpeciesResource.data?.flavorText?.removeNewLines()
             }
+        }
+    }
+
+    private fun setOnClickListeners() {
+        binding.apply {
+            ibBack.setOnClickListener { findNavController().navigateUp() }
+            ibPreviousPokemon.setOnClickListener {
+                sharedViewModel.getPokemonDetail(getPreviousPokemon(sharedViewModel.pokemonName))
+                sharedViewModel.pokemonName = getPreviousPokemon(sharedViewModel.pokemonName)
+                movesList.forEach { textView ->
+                    movesLayout.removeView(textView)
+                }
+                typesList.forEach { chip ->
+                    chipGroup.removeView(chip)
+                }
+            }
+            ibNextPokemon.setOnClickListener {
+                sharedViewModel.getPokemonDetail(getNextPokemon(sharedViewModel.pokemonName))
+                sharedViewModel.pokemonName = getNextPokemon(sharedViewModel.pokemonName)
+                movesList.forEach { textView ->
+                    movesLayout.removeView(textView)
+                }
+                typesList.forEach { chip ->
+                    chipGroup.removeView(chip)
+                }
+            }
+
         }
     }
 
